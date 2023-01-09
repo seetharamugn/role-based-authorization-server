@@ -1,14 +1,13 @@
-package com.devglan.service.impl;
+package com.seetharamu.authserver.service.impl;
 
-import com.devglan.dao.UserDao;
-import com.devglan.model.User;
-import com.devglan.service.UserService;
+import com.seetharamu.authserver.repository.UserRepository;
+import com.seetharamu.authserver.model.User;
+import com.seetharamu.authserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,10 +19,10 @@ import java.util.List;
 public class UserServiceImpl implements UserDetailsService, UserService {
 	
 	@Autowired
-	private UserDao userDao;
+	private UserRepository userRepository;
 
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		User user = userDao.findByUsername(userId);
+		User user = userRepository.findByUsername(userId);
 		if(user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
@@ -36,17 +35,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
-		userDao.findAll().iterator().forEachRemaining(list::add);
+		userRepository.findAll().iterator().forEachRemaining(list::add);
 		return list;
 	}
 
 	@Override
 	public void delete(long id) {
-		userDao.deleteById(id);
+		userRepository.deleteById(id);
 	}
 
 	@Override
     public User save(User user) {
-        return userDao.save(user);
+        return userRepository.save(user);
     }
 }

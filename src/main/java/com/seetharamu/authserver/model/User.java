@@ -1,8 +1,13 @@
-package com.devglan.model;
+package com.seetharamu.authserver.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -10,21 +15,39 @@ public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
-    @Column
+    @NotBlank
+    @Size(max = 20)
     private String username;
-    @Column
-    @JsonIgnore
-    private String password;
-    @Column
-    private long salary;
-    @Column
-    private int age;
 
-    public long getId() {
+    @NotBlank
+    @Size(max = 50)
+    @Email
+    private String email;
+
+    @NotBlank
+    @Size(max = 120)
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public User() {
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -36,6 +59,14 @@ public class User {
         this.username = username;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -44,19 +75,11 @@ public class User {
         this.password = password;
     }
 
-    public long getSalary() {
-        return salary;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setSalary(long salary) {
-        this.salary = salary;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

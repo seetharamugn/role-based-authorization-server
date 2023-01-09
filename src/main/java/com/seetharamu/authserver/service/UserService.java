@@ -1,6 +1,8 @@
-package com.devglan.service;
+package com.seetharamu.authserver.service;
 
-import com.devglan.model.User;
+
+
+import com.seetharamu.authserver.model.User;
 
 import java.util.List;
 

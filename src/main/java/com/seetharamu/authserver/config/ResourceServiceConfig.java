@@ -1,4 +1,4 @@
-package com.seetharamu.customer.config;
+package com.seetharamu.authserver.config;
 
 
 import org.springframework.beans.factory.annotation.Value;
@@ -18,14 +18,14 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 @Configuration
 public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 
-	@Value("${oauth.server.uri}")
-	private String authServerUri;
+	/*@Value("${oauth.server.uri}")
+	private String authServerUri;*/
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 
-		http.antMatcher("/services/profile").authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/services/profile").access("hasAuthority('ROLE_admin')")
+		http.antMatcher("/users/user").authorizeRequests()
+				.antMatchers(HttpMethod.POST, "/user/user").access("hasAuthority('ROLE_admin')")
 				.antMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 
@@ -34,7 +34,7 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public ResourceServerTokenServices tokenServices() {
 		RemoteTokenServices tokenService = new RemoteTokenServices();
-		tokenService.setCheckTokenEndpointUrl(authServerUri + "/oauth/check_token");
+		tokenService.setCheckTokenEndpointUrl( "http://localhost:8082/oauth/check_token");
 		tokenService.setClientId("mobile");
 		tokenService.setClientSecret("secret");
 		return tokenService;
