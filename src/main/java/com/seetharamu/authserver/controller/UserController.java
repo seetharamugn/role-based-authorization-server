@@ -9,6 +9,7 @@ import com.seetharamu.authserver.repository.UserRepository;
 import com.seetharamu.authserver.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,7 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> listUser() {
         return userService.findAll();
     }
@@ -85,11 +87,12 @@ public class UserController {
                 }
             });
         }
-
+        user1.setEnabled(true);
         user1.setRoles(roles);
         userRepository.save(user1);
         return ResponseEntity.ok("User registered successfully!");
     }
+    @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable(value = "id") Long id){
         userService.delete(id);

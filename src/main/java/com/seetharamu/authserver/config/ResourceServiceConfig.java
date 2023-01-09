@@ -25,7 +25,7 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 
 		http.antMatcher("/users/user").authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/user/user").access("hasAuthority('ROLE_admin')")
+				.antMatchers(HttpMethod.POST, "/user/user").access("hasAuthority('ROLE_USER')")
 				.antMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 
