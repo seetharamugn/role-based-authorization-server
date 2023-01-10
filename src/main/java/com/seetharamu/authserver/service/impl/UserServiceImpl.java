@@ -30,10 +30,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return new MyUserDetails(user);
 	}
 
-	private List<SimpleGrantedAuthority> getAuthority() {
-		return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-	}
-
 	public List<User> findAll() {
 		List<User> list = new ArrayList<>();
 		userRepository.findAll().iterator().forEachRemaining(list::add);

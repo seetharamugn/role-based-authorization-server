@@ -59,7 +59,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        System.out.println(user.isEnabled());
         return user.isEnabled();
     }
 

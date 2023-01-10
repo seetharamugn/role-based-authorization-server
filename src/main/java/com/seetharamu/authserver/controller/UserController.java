@@ -7,8 +7,11 @@ import com.seetharamu.authserver.model.User;
 import com.seetharamu.authserver.repository.RoleRepository;
 import com.seetharamu.authserver.repository.UserRepository;
 import com.seetharamu.authserver.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ import java.util.Set;
 @RequestMapping("/users")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
@@ -34,20 +38,22 @@ public class UserController {
     private RoleRepository roleRepository;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> listUser() {
+        logger.info("started fetching the user details ");
         return userService.findAll();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody UserDao user) {
         if (userRepository.existsByUsername(user.getUsername())) {
+            logger.error("Username is already taken!");
             return ResponseEntity
                     .badRequest()
                     .body("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
+            logger.error("Email is already in use!");
             return ResponseEntity
                     .badRequest()
                     .body("Error: Email is already in use!");
@@ -92,11 +98,12 @@ public class UserController {
         userRepository.save(user1);
         return ResponseEntity.ok("User registered successfully!");
     }
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable(value = "id") Long id){
-        userService.delete(id);
-        return "success";
+
+
+    @RequestMapping(value = "/getPublic",method = RequestMethod.GET)
+    public String publicApi(){
+        logger.info("public api started ");
+        return "welcome to the real world";
     }
 
 }

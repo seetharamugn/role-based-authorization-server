@@ -25,7 +25,7 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 
 		http.antMatcher("/users/user").authorizeRequests()
-				.antMatchers(HttpMethod.POST, "/user/user").access("hasAuthority('ROLE_USER')")
+				.antMatchers(HttpMethod.GET, "/users/user").access("hasAuthority('ROLE_ADMIN')")
 				.antMatchers("/*").permitAll()
 				.anyRequest().authenticated();
 
@@ -34,7 +34,7 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 	@Bean
 	public ResourceServerTokenServices tokenServices() {
 		RemoteTokenServices tokenService = new RemoteTokenServices();
-		tokenService.setCheckTokenEndpointUrl( "http://localhost:8082/oauth/check_token");
+		tokenService.setCheckTokenEndpointUrl( "http://localhost:8081/oauth/check_token");
 		tokenService.setClientId("mobile");
 		tokenService.setClientSecret("secret");
 		return tokenService;
