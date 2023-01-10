@@ -11,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,12 +34,14 @@ public class UserController {
     @Autowired
     private RoleRepository roleRepository;
 
+    //get all the user details in the single api and also its admin role I added
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public List<User> listUser() {
         logger.info("started fetching the user details ");
         return userService.findAll();
     }
 
+    //signup api for the users
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody UserDao user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -100,6 +99,7 @@ public class UserController {
     }
 
 
+    // This api is public api any one can access to get the response
     @RequestMapping(value = "/getPublic",method = RequestMethod.GET)
     public String publicApi(){
         logger.info("public api started ");
