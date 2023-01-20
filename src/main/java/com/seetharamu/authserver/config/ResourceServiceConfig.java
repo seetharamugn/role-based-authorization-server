@@ -39,11 +39,5 @@ public class ResourceServiceConfig extends ResourceServerConfigurerAdapter {
 		return tokenService;
 	}
 
-	@Override
-	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		String resourceIds = "inventory";
-		resources.resourceId(resourceIds).tokenServices(tokenServices());
-	}
-
 
 }
